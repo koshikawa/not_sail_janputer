@@ -1,27 +1,34 @@
 #!/usr/bin/python3
-""" not sail janputer """
-import math
+"""
+not sail janputer 
+切り上げしない1翻から13翻までの点数を計算する
+"""
 
-def get_score(fu, han, dealer):
-    """ 得点を返す """
-    if (fu in (20, 25) and han <= 1):
+
+def over_mangan(h):
+    """満貫以上の場合の点数を返す"""
+    if 4 <= h <= 13:
+        return ((h // 2) * 4000 - minus9plus(h) * 4000) * 2 ** (minus9plus(h) // 2)
+    else:
+        return 8000
+
+
+def minus9plus(input_number):
+    """9を引いた正の値を返す"""
+    return max(0, input_number - 9)
+
+
+def get_score(f, h, d):
+    """得点を返す"""
+    if f in (20, 25) and h <= 1:
         return 0
-    child_score = min(fu * 2 ** (han + 4), 8000)
-    if han in (6, 7):
-        child_score = 12000
-    if han in (8, 9, 10):
-        child_score = 16000
-    if han in (11, 12):
-        child_score = 24000
-    if han >= 13:
-        child_score = 32000
+    return min(f * 2 ** (h + 4), over_mangan(h)) * (1 + d * 0.5)
 
-    return child_score * (1 + dealer * 0.5)
 
 for dealer in (False, True):
-    for fu in (list(range(20, 80, 2)) + [25]):
-        print (fu, end = "\t")
+    for fu in list(range(20, 80, 2)) + [25]:
+        print(fu, end="\t")
         for han in range(1, 14):
-            print (f'{int(get_score(fu, han, dealer)):>5}', end = "\t")
-        print ("")
-    print ("")
+            print(f"{int(get_score(fu, han, dealer)):>5}", end="\t")
+        print("")
+    print("")
